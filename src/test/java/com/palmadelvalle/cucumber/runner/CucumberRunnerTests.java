@@ -1,4 +1,4 @@
-package com.palmadelvalle.cucumber;
+package com.palmadelvalle.cucumber.runner;
 
 import org.junit.platform.suite.api.ConfigurationParameter;
 import org.junit.platform.suite.api.IncludeEngines;
