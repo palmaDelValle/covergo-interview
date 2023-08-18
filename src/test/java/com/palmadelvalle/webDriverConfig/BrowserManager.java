@@ -6,6 +6,7 @@ import io.github.bonigarcia.wdm.config.DriverManagerType;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.support.ui.WebDriverWait;
 
 import java.time.Duration;
 
@@ -15,6 +16,7 @@ import static java.time.temporal.ChronoUnit.SECONDS;
 @Slf4j
 public class BrowserManager {
     private final WebDriver driver;
+    private final WebDriverWait wait;
 
     /*
     public BrowserManager() {
@@ -25,33 +27,31 @@ public class BrowserManager {
 */
     //TODO: Refactor all browsers
     public BrowserManager() {
+        Browser browser = null;
         switch (BrowserType.getBrowser()) {
             case CHROMIUM:
-                Chromium chromium = new Chromium();
-                chromium.setupBrowser();
-                driver = chromium.getDriver();
+                browser = new Chromium();
                 break;
             case EDGE:
-                driver = new Edge().getDriver();
+                browser = new Edge();
                 break;
             case FIREFOX:
-                driver = new Firefox().getDriver();
+                browser = new Firefox();
                 break;
             case IEXPLORER:
-                driver = new IExplorer().getDriver();
+                browser = new IExplorer();
                 break;
             case OPERA:
-                driver = new Opera().getDriver();
+                browser = new Opera();
                 break;
             case SAFARI:
-                Safari safari = new Safari();
-                safari.setupBrowser();
-                driver = safari.getDriver();
+                browser = new Safari();
                 break;
             default:
-                Chrome chrome = new Chrome();
-                chrome.setupBrowser();
-                driver = chrome.getDriver();
+                browser = new Chrome();
         }
+        browser.setupBrowser();
+        driver = browser.getDriver();
+        wait = browser.getWebdriverWait();
     }
 }
