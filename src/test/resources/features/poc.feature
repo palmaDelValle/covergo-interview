@@ -1,6 +1,6 @@
 Feature: Asia insurance - Product distribution website
 
-  @chrome @firefox
+  @form
   Scenario Outline: Access to page
 
     Given user navigates to "https://imedical.asiainsurance.hk/" page
@@ -17,6 +17,7 @@ Feature: Asia insurance - Product distribution website
   #  |80 | "Male"    |
 
 
+    @card_details
     Scenario: Card content validation
 
       Given user navigates to "https://imedical.asiainsurance.hk/" page
@@ -24,12 +25,32 @@ Feature: Asia insurance - Product distribution website
       And user selects gender "Male"
       And user clicks on "Show Results" button
       When user is directed to the "plan" page
-      Then user will see cards element
+      Then user see cards element
       And the card will contain the product information
-        | Name            |
-        | Price           |
+        | Title           |
+        | Key             |
+        | Amount          |
         | Price switch    |
         | Buy button      |
         | Annual limit    |
         | Benefits link   |
         | Documents link  |
+
+  @card_details @lang
+  Scenario: Change language
+    Given user navigates to "https://imedical.asiainsurance.hk/" page
+    And user selects age 34
+    And user selects gender "Male"
+    And user clicks on "Show Results" button
+    When user is directed to the "plan" page
+    And user changes lang
+    Then user see cards element
+    And the card will contain the product information
+      | Title           |
+      | Key             |
+      | Amount          |
+      | Price switch    |
+      | Buy button      |
+      | Annual limit    |
+      | Benefits link   |
+      | Documents link  |

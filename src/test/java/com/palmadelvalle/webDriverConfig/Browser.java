@@ -9,8 +9,6 @@ public interface Browser {
     public WebDriverWait getWebdriverWait();
     public void setDriver(WebDriver driver);
 
-    public void setWait(WebDriver driver);
-
     public void setupBrowser();
     public default void teardownBrowser() {
         if (getDriver() != null) {

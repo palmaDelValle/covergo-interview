@@ -1,6 +1,8 @@
 package com.palmadelvalle.cucumber.hooks;
 
+import com.palmadelvalle.webDriverConfig.Browser;
 import com.palmadelvalle.webDriverConfig.BrowserManager;
+import com.palmadelvalle.webDriverConfig.BrowserType;
 import com.palmadelvalle.webDriverConfig.InvalidBrowserException;
 import io.cucumber.java.After;
 import io.cucumber.java.Before;
@@ -14,7 +16,7 @@ import java.util.Collection;
 public class Hooks {
 
     private final WebDriver driver;
-    private BrowserManager browserManager;
+    private final BrowserManager browserManager;
 
 
     public Hooks(BrowserManager browserManager) {
@@ -22,12 +24,10 @@ public class Hooks {
         this.driver = browserManager.getDriver();
     }
 
-
-
     @After
     public void tearDown() {
         log.info("Closing open browsers");
-        this.driver.close();
+        if (browserManager.getBrowserType() != BrowserType.SAFARI) this.driver.close();
         this.driver.quit();
     }
 }

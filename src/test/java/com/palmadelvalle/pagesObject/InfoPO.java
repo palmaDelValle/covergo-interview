@@ -13,4 +13,6 @@ public class InfoPO extends BasePO {
 
     @FindBy(xpath = "//div[contains(@locale,'en')]")
     public List<WebElement> cardsList;
+
+    public String cardListLocatorXpath = "//div[contains(@locale,'en')]";
 }

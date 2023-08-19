@@ -4,6 +4,8 @@ import com.palmadelvalle.webDriverConfig.Browser;
 import com.palmadelvalle.webDriverConfig.BrowserType;
 import io.github.bonigarcia.wdm.WebDriverManager;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.chrome.ChromeOptions;
+import org.openqa.selenium.edge.EdgeOptions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
 import java.time.Duration;
@@ -31,13 +33,14 @@ public class Edge implements Browser {
         this.driver = driver;
     }
 
-    @Override
-    public void setWait(WebDriver driver) {
-    }
 
     @Override
     public void setupBrowser() {
-        this.driver = WebDriverManager.edgedriver().create();
+        EdgeOptions edgeOptions = new EdgeOptions();
+        if (System.getProperty("headless") != null) {
+            edgeOptions.addArguments("--headless");
+        }
+        this.driver = WebDriverManager.edgedriver().capabilities(edgeOptions).create();
         this.wait = new WebDriverWait(this.driver, Duration.ofSeconds(10));
     }
 

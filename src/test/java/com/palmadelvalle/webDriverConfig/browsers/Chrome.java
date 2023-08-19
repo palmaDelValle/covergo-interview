@@ -4,6 +4,7 @@ import com.palmadelvalle.webDriverConfig.Browser;
 import com.palmadelvalle.webDriverConfig.BrowserType;
 import io.github.bonigarcia.wdm.WebDriverManager;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.chrome.ChromeOptions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
 import java.time.Duration;
@@ -33,12 +34,12 @@ public class Chrome implements Browser {
     }
 
     @Override
-    public void setWait(WebDriver driver) {
-    }
-
-    @Override
     public void setupBrowser() {
-        this.driver = WebDriverManager.chromedriver().create();
+        ChromeOptions chromeOptions = new ChromeOptions();
+        if (System.getProperty("headless") != null) {
+            chromeOptions.addArguments("--headless");
+        }
+        this.driver = WebDriverManager.chromedriver().capabilities(chromeOptions).create();
         this.wait = new WebDriverWait(this.driver, Duration.ofSeconds(10));
     }
 

@@ -1,31 +1,18 @@
 package com.palmadelvalle.webDriverConfig;
 
 import com.palmadelvalle.webDriverConfig.browsers.*;
-import io.github.bonigarcia.wdm.WebDriverManager;
-import io.github.bonigarcia.wdm.config.DriverManagerType;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.support.ui.WebDriverWait;
-
-import java.time.Duration;
-
-import static java.time.temporal.ChronoUnit.SECONDS;
 
 @Getter
 @Slf4j
 public class BrowserManager {
     private final WebDriver driver;
     private final WebDriverWait wait;
+    private final BrowserType browserType;
 
-    /*
-    public BrowserManager() {
-        driver = WebDriverManager.chromedriver().create();
-        driver.manage().timeouts().implicitlyWait(Duration.of(5, SECONDS));
-        driver.manage().window().maximize();
-    }
-*/
-    //TODO: Refactor all browsers
     public BrowserManager() {
         Browser browser = null;
         switch (BrowserType.getBrowser()) {
@@ -51,6 +38,7 @@ public class BrowserManager {
                 browser = new Chrome();
         }
         browser.setupBrowser();
+        browserType = browser.getBrowser();
         driver = browser.getDriver();
         wait = browser.getWebdriverWait();
     }
