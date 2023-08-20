@@ -1,4 +1,4 @@
-package com.palmadelvalle.webDriverConfig;
+package com.palmadelvalle.browserConfig;
 
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.support.ui.WebDriverWait;

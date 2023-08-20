@@ -1,4 +1,4 @@
-package com.palmadelvalle.webDriverConfig;
+package com.palmadelvalle.browserConfig;
 
 import lombok.extern.slf4j.Slf4j;
 

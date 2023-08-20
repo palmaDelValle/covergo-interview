@@ -1,17 +1,17 @@
-package com.palmadelvalle.webDriverConfig.browsers;
+package com.palmadelvalle.browserConfig.browsers;
 
-import com.palmadelvalle.webDriverConfig.Browser;
-import com.palmadelvalle.webDriverConfig.BrowserType;
+import com.palmadelvalle.browserConfig.Browser;
+import com.palmadelvalle.browserConfig.BrowserType;
 import io.github.bonigarcia.wdm.WebDriverManager;
+import lombok.extern.slf4j.Slf4j;
 import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.chrome.ChromeOptions;
-import org.openqa.selenium.firefox.FirefoxOptions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
 import java.time.Duration;
 
-public class Firefox implements Browser {
-    private BrowserType browserType = BrowserType.FIREFOX;
+@Slf4j
+public class IExplorer implements Browser {
+    private BrowserType browserType = BrowserType.IEXPLORER;
     private WebDriver driver;
     private WebDriverWait wait;
     @Override
@@ -33,14 +33,13 @@ public class Firefox implements Browser {
         this.driver = driver;
     }
 
-
     @Override
     public void setupBrowser() {
-        FirefoxOptions firefoxOptions = new FirefoxOptions();
         if (System.getProperty("headless") != null) {
-            firefoxOptions.addArguments("--headless");
+            log.warn("Headless mode not supported in Internet explorer");
+            log.warn("Ignoring headless property");
         }
-        this.driver = WebDriverManager.firefoxdriver().create();
+        this.driver = WebDriverManager.iedriver().create();
         this.wait = new WebDriverWait(this.driver, Duration.ofSeconds(10));
     }
 

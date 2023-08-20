@@ -1,4 +1,4 @@
-package com.palmadelvalle.webDriverConfig;
+package com.palmadelvalle.browserConfig;
 
 public class InvalidBrowserException extends Exception {
 

@@ -2,8 +2,7 @@ package com.palmadelvalle.cucumber.stepsDefinition;
 
 import com.palmadelvalle.pagesObject.*;
 import com.palmadelvalle.utils.Constants;
-import com.palmadelvalle.utils.TranslationUtils;
-import com.palmadelvalle.webDriverConfig.BrowserManager;
+import com.palmadelvalle.browserConfig.BrowserManager;
 import io.cucumber.datatable.DataTable;
 import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
@@ -22,7 +21,7 @@ import java.util.List;
 
 import static com.palmadelvalle.pagesObject.HeaderPO.BTN_EN_LOCATOR_XPATH;
 import static com.palmadelvalle.pagesObject.HeaderPO.BTN_HK_ZK_LOCATOR_XPATH;
-import static com.palmadelvalle.pagesObject.ImportantNotesModalPO.*;
+import static com.palmadelvalle.pagesObject.ModalPO.*;
 
 @Slf4j
 public class Steps {
@@ -33,7 +32,7 @@ public class Steps {
     private final HeaderPO headerPO;
     private final CardPO cardPO;
     private final BasePO basePO;
-    private final ImportantNotesModalPO impNotPO;
+    private final ModalPO modalPO;
     private final WebDriver driver;
     private final WebDriverWait wait;
     private String locale = Constants.EN;
@@ -44,9 +43,9 @@ public class Steps {
         this.formPO = new FormPO(driver);
         this.infoPO = new InfoPO(driver);
         this.cardPO = new CardPO(driver);
-        this.headerPO = new HeaderPO(driver);
+        this.headerPO = new HeaderPO(driver, wait);
         this.basePO = new BasePO(driver);
-        this.impNotPO = new ImportantNotesModalPO(driver);
+        this.modalPO = new ModalPO(driver, wait);
     }
 
     @Given("user navigates to {string} page")
@@ -119,24 +118,46 @@ public class Steps {
         WebElement firstCard = infoPO.getCardsList(locale).get(0);
         wait.until(ExpectedConditions.elementToBeClickable(firstCard));
         log.info("Field to check: {}", link);
-        wait.until(ExpectedConditions.presenceOfElementLocated(cardPO.getCardFieldLocator(link, locale)));
-        //wait.until(ExpectedConditions.presenceOfElementLocated(cardPO.getLinkLocatorByLocale(link, locale)));
-        Assertions.assertTrue(firstCard.findElement(cardPO.getCardFieldLocator(link, locale)).isDisplayed());
-        //Assertions.assertTrue(firstCard.findElement(cardPO.getLinkLocatorByLocale(link, locale)).isDisplayed());
-        firstCard.findElement(cardPO.getCardFieldLocator(link, locale)).click();
-        //firstCard.findElement(cardPO.getLinkLocatorByLocale(link, locale)).click();
+        //wait.until(ExpectedConditions.presenceOfElementLocated(cardPO.getCardFieldLocator(link, locale)));
+        //Assertions.assertTrue(firstCard.findElement(cardPO.getCardFieldLocator(link, locale)).isDisplayed());
+        //firstCard.findElement(cardPO.getCardFieldLocator(link, locale)).click();
+
+        wait.until(ExpectedConditions.presenceOfElementLocated(basePO.getLinkLocatorByLocale(link, locale)));
+        Assertions.assertTrue(firstCard.findElement(basePO.getLinkLocatorByLocale(link, locale)).isDisplayed());
+        firstCard.findElement(basePO.getLinkLocatorByLocale(link, locale)).click();
     }
 
     @Then("a modal with title {string} should be present")
     public void aModalWithTitleShouldBePresent(String title) {
         wait.until(ExpectedConditions.elementToBeClickable(By.xpath(modalLocatorXpath)));
         wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath(modalLocatorXpath + getTitleXpathByLocale(title, locale))));
-        Assertions.assertTrue(impNotPO.modal.findElement(By.xpath(getTitleXpathByLocale(title, locale))).isDisplayed());
+        Assertions.assertTrue(modalPO.modal.findElement(By.xpath(getTitleXpathByLocale(title, locale))).isDisplayed());
     }
 
     @And("the modal will be not present")
     public void theModalWillBeNotPresent() {
         ExpectedCondition<Boolean> result = ExpectedConditions.invisibilityOfElementLocated(By.xpath(modalLocatorXpath));
         Assertions.assertTrue(result.apply(driver));
+    }
+
+    @When("user changes to {string} lang")
+    public void userChangesLangToLang(String lang) {
+        headerPO.changeLangTo(lang);
+    }
+
+    @Then("the page should be in {string} language")
+    public void thePageShouldBeInLang(String lang) {
+        log.info("Current url: {} -> Lang: {}", driver.getCurrentUrl(), lang);
+        wait.until(ExpectedConditions.urlContains(lang));
+        Assertions.assertTrue(driver.getCurrentUrl().contains(lang));
+    }
+
+    @Then("the section Sub-benefits should {string}")
+    public void theSectionLinkShouldCondition(String condition) {
+        if (condition.equalsIgnoreCase("be visible")) {
+            Assertions.assertTrue(modalPO.isSectionVisible());
+        } else if (condition.equalsIgnoreCase("not be visible")) {
+            Assertions.assertFalse(modalPO.isSectionVisible());
+        }
     }
 }

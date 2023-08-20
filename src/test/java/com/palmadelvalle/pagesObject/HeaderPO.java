@@ -1,12 +1,22 @@
 package com.palmadelvalle.pagesObject;
 
+import com.palmadelvalle.utils.Constants;
+import org.junit.jupiter.api.Assertions;
+import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
+import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.WebDriverWait;
 
 public class HeaderPO extends BasePO {
-    public HeaderPO(WebDriver driver) {
+
+    private WebDriver driver;
+    private WebDriverWait wait;
+    public HeaderPO(WebDriver driver, WebDriverWait wait) {
         super(driver);
+        this.driver = driver;
+        this.wait = wait;
     }
 
     public static final String BTN_HK_ZK_LOCATOR_XPATH = "//header//button[1]";
@@ -18,5 +28,13 @@ public class HeaderPO extends BasePO {
     @FindBy(xpath = BTN_EN_LOCATOR_XPATH)
     public WebElement btnEnlang;
 
-
+    public void changeLangTo(String lang) {
+        if(lang.equalsIgnoreCase(Constants.ZH_HK)) {
+            wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath(BTN_HK_ZK_LOCATOR_XPATH)));
+            btnHKZKlang.click();
+        } else if (lang.equalsIgnoreCase(Constants.EN)) {
+            wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath(BTN_EN_LOCATOR_XPATH)));
+            btnEnlang.click();
+        }
+    }
 }

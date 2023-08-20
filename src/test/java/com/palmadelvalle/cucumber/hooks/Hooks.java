@@ -1,16 +1,10 @@
 package com.palmadelvalle.cucumber.hooks;
 
-import com.palmadelvalle.webDriverConfig.Browser;
-import com.palmadelvalle.webDriverConfig.BrowserManager;
-import com.palmadelvalle.webDriverConfig.BrowserType;
-import com.palmadelvalle.webDriverConfig.InvalidBrowserException;
+import com.palmadelvalle.browserConfig.BrowserManager;
+import com.palmadelvalle.browserConfig.BrowserType;
 import io.cucumber.java.After;
-import io.cucumber.java.Before;
-import io.cucumber.java.Scenario;
 import lombok.extern.slf4j.Slf4j;
 import org.openqa.selenium.WebDriver;
-
-import java.util.Collection;
 
 @Slf4j
 public class Hooks {

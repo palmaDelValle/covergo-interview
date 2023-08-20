@@ -85,6 +85,10 @@ public class CardPO extends BasePO {
                 return (cardSeeAllDocumentsLink(locale));
             case "Important notes":
                 return (cardShowImportantsNotesLink(locale));
+            case "See sub-benefit":
+                return getLinkLocatorByLocale("see_sub_bebefits", locale);
+            case "Hide sub-benefit":
+                return getLinkLocatorByLocale("hide_sub_bebefits", locale);
             default:
                 log.error("Field {} not found.", field);
                 throw new NullPointerException(String.format("Field %s not found", field));

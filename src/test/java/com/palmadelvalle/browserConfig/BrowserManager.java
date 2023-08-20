@@ -1,6 +1,6 @@
-package com.palmadelvalle.webDriverConfig;
+package com.palmadelvalle.browserConfig;
 
-import com.palmadelvalle.webDriverConfig.browsers.*;
+import com.palmadelvalle.browserConfig.browsers.*;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import org.openqa.selenium.WebDriver;
@@ -41,5 +41,6 @@ public class BrowserManager {
         browserType = browser.getBrowser();
         driver = browser.getDriver();
         wait = browser.getWebdriverWait();
+        driver.manage().window().maximize();
     }
 }

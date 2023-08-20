@@ -1,18 +1,16 @@
-package com.palmadelvalle.webDriverConfig.browsers;
+package com.palmadelvalle.browserConfig.browsers;
 
-import com.palmadelvalle.webDriverConfig.Browser;
-import com.palmadelvalle.webDriverConfig.BrowserType;
+import com.palmadelvalle.browserConfig.Browser;
+import com.palmadelvalle.browserConfig.BrowserType;
 import io.github.bonigarcia.wdm.WebDriverManager;
-import lombok.extern.slf4j.Slf4j;
 import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.safari.SafariOptions;
+import org.openqa.selenium.edge.EdgeOptions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
 import java.time.Duration;
 
-@Slf4j
-public class Safari implements Browser {
-    private BrowserType browserType = BrowserType.SAFARI;
+public class Edge implements Browser {
+    private BrowserType browserType = BrowserType.EDGE;
     private WebDriver driver;
     private WebDriverWait wait;
     @Override
@@ -34,13 +32,14 @@ public class Safari implements Browser {
         this.driver = driver;
     }
 
+
     @Override
     public void setupBrowser() {
+        EdgeOptions edgeOptions = new EdgeOptions();
         if (System.getProperty("headless") != null) {
-            log.warn("Headless mode not supported in Opera");
-            log.warn("Ignoring headless property");
+            edgeOptions.addArguments("--headless");
         }
-        this.driver = WebDriverManager.safaridriver().create();
+        this.driver = WebDriverManager.edgedriver().capabilities(edgeOptions).create();
         this.wait = new WebDriverWait(this.driver, Duration.ofSeconds(10));
     }
 

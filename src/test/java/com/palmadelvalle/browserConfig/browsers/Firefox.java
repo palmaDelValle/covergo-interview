@@ -1,20 +1,17 @@
-package com.palmadelvalle.webDriverConfig.browsers;
+package com.palmadelvalle.browserConfig.browsers;
 
-import com.palmadelvalle.webDriverConfig.Browser;
-import com.palmadelvalle.webDriverConfig.BrowserType;
+import com.palmadelvalle.browserConfig.Browser;
+import com.palmadelvalle.browserConfig.BrowserType;
 import io.github.bonigarcia.wdm.WebDriverManager;
 import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.chrome.ChromeOptions;
-import org.openqa.selenium.chromium.ChromiumOptions;
 import org.openqa.selenium.firefox.FirefoxOptions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
 import java.time.Duration;
 
-public class Chromium implements Browser {
-    private BrowserType browserType = BrowserType.CHROMIUM;
+public class Firefox implements Browser {
+    private BrowserType browserType = BrowserType.FIREFOX;
     private WebDriver driver;
-
     private WebDriverWait wait;
     @Override
     public BrowserType getBrowser() {
@@ -29,6 +26,7 @@ public class Chromium implements Browser {
     public WebDriverWait getWebdriverWait() {
         return wait;
     }
+
     @Override
     public void setDriver(WebDriver driver) {
         this.driver = driver;
@@ -37,11 +35,11 @@ public class Chromium implements Browser {
 
     @Override
     public void setupBrowser() {
-        ChromeOptions chromeOptions = new ChromeOptions();
+        FirefoxOptions firefoxOptions = new FirefoxOptions();
         if (System.getProperty("headless") != null) {
-            chromeOptions.addArguments("--headless");
+            firefoxOptions.addArguments("--headless");
         }
-        this.driver = WebDriverManager.chromiumdriver().capabilities(chromeOptions).create();
+        this.driver = WebDriverManager.firefoxdriver().create();
         this.wait = new WebDriverWait(this.driver, Duration.ofSeconds(10));
     }
 
