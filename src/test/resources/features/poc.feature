@@ -6,15 +6,13 @@ Feature: Asia insurance - Product distribution website
     Given user navigates to "https://imedical.asiainsurance.hk/" page
     When user selects age <age>
      And user selects gender <gender>
-     And user clicks on "Show Results" button
+     And user clicks on "show_results" button
     Then user is directed to the "plan" page
 
     Examples:
     |age|gender     |
-    |0  | "Female"  |
-  #  |80 | "Female"  |
-  #  |0  | "Male"    |
-  #  |80 | "Male"    |
+    |0  | "female"  |
+    |80 | "male"    |
 
 
     @card_details
@@ -22,8 +20,8 @@ Feature: Asia insurance - Product distribution website
 
       Given user navigates to "https://imedical.asiainsurance.hk/" page
       And user selects age 34
-      And user selects gender "Male"
-      And user clicks on "Show Results" button
+      And user selects gender "male"
+      And user clicks on "show_results" button
       When user is directed to the "plan" page
       Then user see cards element
       And the card will contain the product information
@@ -36,12 +34,28 @@ Feature: Asia insurance - Product distribution website
         | Benefits link   |
         | Documents link  |
 
+  @important_notes
+  Scenario: User can see important notes
+
+    Given user navigates to "https://imedical.asiainsurance.hk/" page
+    And user selects age 34
+    And user selects gender "male"
+    And user clicks on "show_results" button
+    And user is directed to the "plan" page
+    And user see cards element
+    When user clicks on "Documents link" link
+    And user clicks on "Important notes" link
+    Then a modal with title "importantNotes" should be present
+    And user clicks on "ok" button
+    And the modal will be not present
+
+
   @card_details @lang
   Scenario: Change language
     Given user navigates to "https://imedical.asiainsurance.hk/" page
     And user selects age 34
-    And user selects gender "Male"
-    And user clicks on "Show Results" button
+    And user selects gender "male"
+    And user clicks on "show_results" button
     When user is directed to the "plan" page
     And user changes lang
     Then user see cards element

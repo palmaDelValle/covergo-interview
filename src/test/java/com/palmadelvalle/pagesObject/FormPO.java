@@ -1,5 +1,6 @@
 package com.palmadelvalle.pagesObject;
 
+import com.palmadelvalle.utils.TranslationUtils;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -14,17 +15,11 @@ public class FormPO extends BasePO {
         this.driver = driver;
     }
 
-
-    /*public FormPageObject(WebDriver driver) {
-        this.driver = driver;
-        PageFactory.initElements(driver, this);
-    }*/
-
     @FindBy(xpath = "//option[@value='1']//ancestor-or-self::select")
     public WebElement ageSelect;
 
-    @FindBy(xpath = "//option[@value='male']//ancestor-or-self::select")
-    public WebElement genderSelector;
+    String genderLocationXpath = "//option[text()='%s']//ancestor-or-self::select";
+    //public WebElement genderSelector;
 
     @FindBy(xpath = "//button[contains(text(), 'Show Results')]")
     public WebElement showResultsButton;
@@ -33,12 +28,9 @@ public class FormPO extends BasePO {
         new Select(ageSelect).selectByVisibleText(age.toString());
     }
 
-    public void selectGender(String gender) {
-        new Select(genderSelector).selectByVisibleText(gender);
+    public void selectGender(String gender, String locale) {
+        WebElement genderWebElement = driver.findElement(By.xpath(String.format(genderLocationXpath, TranslationUtils.getLabelByLang(gender, locale))));
+        new Select(genderWebElement).selectByVisibleText(TranslationUtils.getLabelByLang(gender, locale));
     }
 
-    public WebElement getButtonByLabel(String label) {
-        String xpath = String.format("//button[contains(text(), '%s')]", label);
-        return driver.findElement(By.xpath(xpath));
-    }
 }

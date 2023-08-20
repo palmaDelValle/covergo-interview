@@ -1,11 +1,9 @@
 package com.palmadelvalle.cucumber.stepsDefinition;
 
-import com.palmadelvalle.pagesObject.CardPO;
-import com.palmadelvalle.pagesObject.HeaderPO;
-import com.palmadelvalle.pagesObject.InfoPO;
+import com.palmadelvalle.pagesObject.*;
 import com.palmadelvalle.utils.Constants;
+import com.palmadelvalle.utils.TranslationUtils;
 import com.palmadelvalle.webDriverConfig.BrowserManager;
-import com.palmadelvalle.pagesObject.FormPO;
 import io.cucumber.datatable.DataTable;
 import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
@@ -13,10 +11,18 @@ import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Assertions;
+import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.support.ui.ExpectedCondition;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
+
+import java.util.List;
+
+import static com.palmadelvalle.pagesObject.HeaderPO.BTN_EN_LOCATOR_XPATH;
+import static com.palmadelvalle.pagesObject.HeaderPO.BTN_HK_ZK_LOCATOR_XPATH;
+import static com.palmadelvalle.pagesObject.ImportantNotesModalPO.*;
 
 @Slf4j
 public class Steps {
@@ -24,11 +30,13 @@ public class Steps {
     private BrowserManager browserManager;
     private final FormPO formPO;
     private final InfoPO infoPO;
-
     private final HeaderPO headerPO;
     private final CardPO cardPO;
+    private final BasePO basePO;
+    private final ImportantNotesModalPO impNotPO;
     private final WebDriver driver;
     private final WebDriverWait wait;
+    private String locale = Constants.EN;
 
     public Steps(BrowserManager browserManager) {
         this.driver = browserManager.getDriver();
@@ -37,6 +45,8 @@ public class Steps {
         this.infoPO = new InfoPO(driver);
         this.cardPO = new CardPO(driver);
         this.headerPO = new HeaderPO(driver);
+        this.basePO = new BasePO(driver);
+        this.impNotPO = new ImportantNotesModalPO(driver);
     }
 
     @Given("user navigates to {string} page")
@@ -51,12 +61,12 @@ public class Steps {
 
     @And("user selects gender {string}")
     public void userSelectsGenderGender(String gender) {
-        formPO.selectGender(gender);
+        formPO.selectGender(gender, locale);
     }
 
     @And("user clicks on {string} button")
     public void userClicksOnButton(String buttonLabel) {
-        formPO.getButtonByLabel(buttonLabel).click();
+        basePO.getButtonByLabel(buttonLabel, locale).click();
     }
 
     @Then("user is directed to the {string} page")
@@ -67,30 +77,66 @@ public class Steps {
 
     @Then("user see cards element")
     public void userWillSeeCardsElement() {
-        wait.until(ExpectedConditions.visibilityOfAllElements(infoPO.cardsList));
-        Assertions.assertEquals(8, infoPO.cardsList.size());
+        List<WebElement> cardsList = infoPO.getCardsList(locale);
+        wait.until(ExpectedConditions.visibilityOfAllElements(cardsList));
+        Assertions.assertEquals(8, cardsList.size());
     }
     
 
     @And("the card will contain the product information")
     public void theCardWillContainTheProductInformation(DataTable fields) {
-        WebElement firstCard = infoPO.cardsList.get(0);
+        WebElement firstCard = infoPO.getCardsList(locale).get(0);
         wait.until(ExpectedConditions.elementToBeClickable(firstCard));
 
         for (String field : fields.asList(String.class)) {
             log.info("Field to check: {}", field);
-            wait.until(ExpectedConditions.presenceOfElementLocated(cardPO.getCardFieldLocator(field)));
-            Assertions.assertTrue(firstCard.findElement(cardPO.getCardFieldLocator(field)).isDisplayed());
+            wait.until(ExpectedConditions.presenceOfElementLocated(cardPO.getCardFieldLocator(field, locale)));
+            //wait.until(ExpectedConditions.presenceOfElementLocated(cardPO.getLinkLocatorByLocale(field, locale)));
+
+            Assertions.assertTrue(firstCard.findElement(cardPO.getCardFieldLocator(field, locale)).isDisplayed());
+            //Assertions.assertTrue(firstCard.findElement(cardPO.getLinkLocatorByLocale(field, locale)).isDisplayed());
         }
     }
-//TODO: Revisar errores
     @And("user changes lang")
-    public void userChangesLang() throws InterruptedException {
+    public void userChangesLang() {
+        // Assume that when the url not contain lang, the page is in English.
         if(driver.getCurrentUrl().contains(Constants.ZH_HK)) {
+            wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath(BTN_EN_LOCATOR_XPATH)));
             headerPO.btnEnlang.click();
-        } else if (driver.getCurrentUrl().contains(Constants.EN)) {
+            wait.until(ExpectedConditions.urlContains(Constants.EN));
+            Assertions.assertTrue(driver.getCurrentUrl().contains(Constants.EN));
+        } else {
+            wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath(BTN_HK_ZK_LOCATOR_XPATH)));
             headerPO.btnHKZKlang.click();
+            wait.until(ExpectedConditions.urlContains(Constants.ZH_HK));
+            Assertions.assertTrue(driver.getCurrentUrl().contains(Constants.ZH_HK));
+            locale = Constants.ZH_HK;
         }
-        Thread.sleep(2000);
+    }
+
+    @When("user clicks on {string} link")
+    public void userClicksOnLink(String link) {
+        WebElement firstCard = infoPO.getCardsList(locale).get(0);
+        wait.until(ExpectedConditions.elementToBeClickable(firstCard));
+        log.info("Field to check: {}", link);
+        wait.until(ExpectedConditions.presenceOfElementLocated(cardPO.getCardFieldLocator(link, locale)));
+        //wait.until(ExpectedConditions.presenceOfElementLocated(cardPO.getLinkLocatorByLocale(link, locale)));
+        Assertions.assertTrue(firstCard.findElement(cardPO.getCardFieldLocator(link, locale)).isDisplayed());
+        //Assertions.assertTrue(firstCard.findElement(cardPO.getLinkLocatorByLocale(link, locale)).isDisplayed());
+        firstCard.findElement(cardPO.getCardFieldLocator(link, locale)).click();
+        //firstCard.findElement(cardPO.getLinkLocatorByLocale(link, locale)).click();
+    }
+
+    @Then("a modal with title {string} should be present")
+    public void aModalWithTitleShouldBePresent(String title) {
+        wait.until(ExpectedConditions.elementToBeClickable(By.xpath(modalLocatorXpath)));
+        wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath(modalLocatorXpath + getTitleXpathByLocale(title, locale))));
+        Assertions.assertTrue(impNotPO.modal.findElement(By.xpath(getTitleXpathByLocale(title, locale))).isDisplayed());
+    }
+
+    @And("the modal will be not present")
+    public void theModalWillBeNotPresent() {
+        ExpectedCondition<Boolean> result = ExpectedConditions.invisibilityOfElementLocated(By.xpath(modalLocatorXpath));
+        Assertions.assertTrue(result.apply(driver));
     }
 }

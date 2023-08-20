@@ -1,12 +1,9 @@
 package com.palmadelvalle.pagesObject;
 
-import com.palmadelvalle.utils.Constants;
 import com.palmadelvalle.utils.TranslationUtils;
 import lombok.extern.slf4j.Slf4j;
-import org.junit.jupiter.api.Assertions;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
 
 @Slf4j
 public class CardPO extends BasePO {
@@ -20,9 +17,11 @@ public class CardPO extends BasePO {
     
     private final String SHARED_XPATH = "//div[contains(@class,'items-center')]";
 
-    private String divContainsTextXpath(String link) {
+    /*
+    public String divContainsTextXpath(String link) {
         return String.format("//div[contains(text(),'%s')]",link);
     }
+     */
 
     public By cardTitle(){
         return By.xpath(String.format("%s[1][1]//h4", SHARED_XPATH));
@@ -48,31 +47,25 @@ public class CardPO extends BasePO {
         return By.xpath(String.format("%s[2][1]//button", SHARED_XPATH));
     }
 
-
     public By cardBenefitsSection(){
         return By.xpath("//div[contains(@class,'py-2')][1]");
     }
 
-    public By cardSeeAllBenefitsLink(){
-        String link = null;
-        String lang = Constants.EN;
-        if (driver.getCurrentUrl().contains(Constants.ZH_HK)) {
-            log.info("Language defined is: {}", Constants.ZH_HK);
-            lang = Constants.ZH_HK;
-        }
-        link = TranslationUtils.getLabelByLang("see_all_benefits", lang);
-        return By.xpath(divContainsTextXpath(link));
+    public By cardSeeAllBenefitsLink(String locale){
+        //return By.xpath(divContainsTextXpath(TranslationUtils.getLabelByLang("see_all_benefits", locale)));
+        return getLinkLocatorByLocale("see_all_benefits", locale);
     }
 
-    public By cardSeeAllDocumentsLink(){
-        return By.xpath(divContainsTextXpath("See All Documents and Notes"));
+    public By cardSeeAllDocumentsLink(String locale){
+        //return By.xpath(divContainsTextXpath(TranslationUtils.getLabelByLang("see_all_documents_and_notes", locale)));
+        return getLinkLocatorByLocale("see_all_documents_and_notes", locale);
     }
 
-    public By cardShowImportantsNotesLink() {
-        return By.xpath(divContainsTextXpath("Show Important Notes"));
+    public By cardShowImportantsNotesLink(String locale) {
+        return getLinkLocatorByLocale("show_important_notes", locale);
     }
 
-    public By getCardFieldLocator(String field) {
+    public By getCardFieldLocator(String field, String locale) {
         switch (field) {
             case "Title":
                 return (cardTitle());
@@ -87,9 +80,11 @@ public class CardPO extends BasePO {
             case "Annual limit":
                 return (cardBenefitsSection());
             case "Benefits link":
-                return (cardSeeAllBenefitsLink());
+                return (cardSeeAllBenefitsLink(locale));
             case "Documents link":
-                return (cardSeeAllDocumentsLink());
+                return (cardSeeAllDocumentsLink(locale));
+            case "Important notes":
+                return (cardShowImportantsNotesLink(locale));
             default:
                 log.error("Field {} not found.", field);
                 throw new NullPointerException(String.format("Field %s not found", field));

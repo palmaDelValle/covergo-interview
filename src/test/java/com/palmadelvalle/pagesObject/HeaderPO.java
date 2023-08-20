@@ -9,9 +9,14 @@ public class HeaderPO extends BasePO {
         super(driver);
     }
 
-    @FindBy(xpath = "//header//button[1]")
+    public static final String BTN_HK_ZK_LOCATOR_XPATH = "//header//button[1]";
+    public static final String BTN_EN_LOCATOR_XPATH = "//header//button[2]";
+
+    @FindBy(xpath = BTN_HK_ZK_LOCATOR_XPATH)
     public WebElement btnHKZKlang;
 
-    @FindBy(xpath = "//header//button[1]")
+    @FindBy(xpath = BTN_EN_LOCATOR_XPATH)
     public WebElement btnEnlang;
+
+
 }

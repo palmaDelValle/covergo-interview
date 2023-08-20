@@ -1,8 +1,11 @@
 package com.palmadelvalle.pagesObject;
 
+import com.palmadelvalle.utils.TranslationUtils;
 import lombok.extern.slf4j.Slf4j;
+import org.openqa.selenium.By;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.PageFactory;
 import org.openqa.selenium.support.ui.ExpectedCondition;
 import org.openqa.selenium.support.ui.ExpectedConditions;
@@ -16,12 +19,16 @@ public class BasePO {
         PageFactory.initElements(driver, this);
     }
 
-    public boolean waitForPageToLoad(WebDriverWait wait) {
-        // wait for Javascript to load
-        ExpectedCondition<Boolean> jsLoad = driver -> ((JavascriptExecutor)driver).executeScript("return document.readyState")
-                .toString().equals("complete");
-        log.info("Is page still loading? {}", jsLoad);
-        ExpectedConditions.jsReturnsValue("return document.readyState");
-        return wait.until(jsLoad);
+    public String divContainsTextXpath(String link) {
+        return String.format("//div[contains(text(),'%s')]",link);
+    }
+
+    public WebElement getButtonByLabel(String key, String locale) {
+        String xpath = String.format("//button[contains(text(), '%s')]", TranslationUtils.getLabelByLang(key, locale));
+        return driver.findElement(By.xpath(xpath));
+    }
+
+    public By getLinkLocatorByLocale(String key, String locale) {
+        return By.xpath(divContainsTextXpath(TranslationUtils.getLabelByLang(key, locale)));
     }
 }

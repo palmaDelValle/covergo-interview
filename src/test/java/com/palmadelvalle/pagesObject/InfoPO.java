@@ -1,5 +1,6 @@
 package com.palmadelvalle.pagesObject;
 
+import com.palmadelvalle.utils.Constants;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
@@ -11,8 +12,23 @@ public class InfoPO extends BasePO {
         super(driver);
     }
 
-    @FindBy(xpath = "//div[contains(@locale,'en')]")
-    public List<WebElement> cardsList;
+    public static final String cardListLocatorENXpath = "//div[contains(@locale,'en')]";
+    public static final String cardListLocatorHKZKXpath = "//div[contains(@locale,'zh-HK')]";
 
-    public String cardListLocatorXpath = "//div[contains(@locale,'en')]";
+    @FindBy(xpath = cardListLocatorENXpath)
+    public List<WebElement> cardsListEn;
+
+    @FindBy(xpath = cardListLocatorHKZKXpath)
+    public List<WebElement> cardsListZHHK;
+
+
+
+
+    public List<WebElement> getCardsList(String locale) {
+        if(locale.equalsIgnoreCase(Constants.ZH_HK)) {
+            return cardsListZHHK;
+        } else {
+            return cardsListEn;
+        }
+    }
 }
