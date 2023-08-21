@@ -41,7 +41,6 @@ public class Opera implements Browser {
             log.warn("Ignoring headless property");
         }
         this.driver = WebDriverManager.operadriver().create();
-        this.wait = new WebDriverWait(this.driver, Duration.ofSeconds(10));
     }
 
 }

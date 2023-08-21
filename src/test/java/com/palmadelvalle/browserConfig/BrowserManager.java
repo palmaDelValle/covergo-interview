@@ -1,10 +1,13 @@
 package com.palmadelvalle.browserConfig;
 
 import com.palmadelvalle.browserConfig.browsers.*;
+import com.palmadelvalle.utils.Constants;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.support.ui.WebDriverWait;
+
+import java.time.Duration;
 
 @Getter
 @Slf4j
@@ -13,6 +16,9 @@ public class BrowserManager {
     private final WebDriverWait wait;
     private final BrowserType browserType;
 
+    /**
+     * This method controls which browser is instantiated.
+     */
     public BrowserManager() {
         Browser browser = null;
         switch (BrowserType.getBrowser()) {
@@ -40,7 +46,9 @@ public class BrowserManager {
         browser.setupBrowser();
         browserType = browser.getBrowser();
         driver = browser.getDriver();
-        wait = browser.getWebdriverWait();
+        // Define the WebDriverWait with a timeout of the seconds informed in the Constants class.
+        wait = new WebDriverWait(this.driver, Duration.ofSeconds(Constants.TIMEOUT_IN_SECONDS));
+        // Maximize the browser window.
         driver.manage().window().maximize();
     }
 }

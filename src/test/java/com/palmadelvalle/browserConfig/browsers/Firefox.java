@@ -40,7 +40,6 @@ public class Firefox implements Browser {
             firefoxOptions.addArguments("--headless");
         }
         this.driver = WebDriverManager.firefoxdriver().create();
-        this.wait = new WebDriverWait(this.driver, Duration.ofSeconds(10));
     }
 
 }

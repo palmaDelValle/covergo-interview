@@ -24,8 +24,8 @@ Feature: Asia insurance - Product distribution website - Card content
   Scenario: User can see important notes
     Given user is directed to the "plan" page
     And user see cards element
-    When user clicks on "Documents link" link
-    And user clicks on "Important notes" link
+    When user clicks on "see_all_documents_and_notes" link
+    And user clicks on "show_important_notes" link
     Then a modal with title "importantNotes" should be present
     And user clicks on "ok" button
     And the modal will be not present
@@ -39,19 +39,13 @@ Feature: Asia insurance - Product distribution website - Card content
     And user clicks on "ok" button
     And the modal will be not present
 
-    # TODO: FIX
   @benefits_modal @sub-benefit
-  Scenario Outline: User can see all benefits
+  Scenario: User can see all benefits
     Given user is directed to the "plan" page
     And user see cards element
     When user clicks on "see_all_benefits" link
     And a modal with title "benefits" should be present
-    And user clicks on <link> link
-    Then the section Sub-benefits should <condition>
-    And user clicks on <link> link
-    Then the section Sub-benefits should <condition>
-
-    Examples:
-      |link                    | condition         |
-      | "see_sub_bebefits"     | "be visible"      |
-      | "hide_sub_bebefits"    | "not be visible"  |
+    And user clicks on "see_sub_bebefits" link
+    Then the section "Sub-benefits" should "be visible"
+    And user clicks on "hide_sub_bebefits" link
+    Then the section "Sub-benefits" should "not be visible"

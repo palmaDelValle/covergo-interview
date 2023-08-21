@@ -40,7 +40,6 @@ public class Safari implements Browser {
             log.warn("Ignoring headless property");
         }
         this.driver = WebDriverManager.safaridriver().create();
-        this.wait = new WebDriverWait(this.driver, Duration.ofSeconds(10));
     }
 
 }

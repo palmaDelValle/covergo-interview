@@ -40,7 +40,6 @@ public class Chromium implements Browser {
             chromeOptions.addArguments("--headless");
         }
         this.driver = WebDriverManager.chromiumdriver().capabilities(chromeOptions).create();
-        this.wait = new WebDriverWait(this.driver, Duration.ofSeconds(10));
     }
 
 }

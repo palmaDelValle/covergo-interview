@@ -40,7 +40,6 @@ public class Edge implements Browser {
             edgeOptions.addArguments("--headless");
         }
         this.driver = WebDriverManager.edgedriver().capabilities(edgeOptions).create();
-        this.wait = new WebDriverWait(this.driver, Duration.ofSeconds(10));
     }
 
 }

@@ -1,6 +1,5 @@
 package com.palmadelvalle.pagesObject;
 
-import com.palmadelvalle.utils.TranslationUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
@@ -16,12 +15,6 @@ public class CardPO extends BasePO {
     }
     
     private final String SHARED_XPATH = "//div[contains(@class,'items-center')]";
-
-    /*
-    public String divContainsTextXpath(String link) {
-        return String.format("//div[contains(text(),'%s')]",link);
-    }
-     */
 
     public By cardTitle(){
         return By.xpath(String.format("%s[1][1]//h4", SHARED_XPATH));

@@ -40,7 +40,6 @@ public class IExplorer implements Browser {
             log.warn("Ignoring headless property");
         }
         this.driver = WebDriverManager.iedriver().create();
-        this.wait = new WebDriverWait(this.driver, Duration.ofSeconds(10));
     }
 
 }
