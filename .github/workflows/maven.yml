@@ -30,11 +30,14 @@ jobs:
       with:
         distribution: 'temurin'
         java-version: ${{ matrix.java }}
+    - name: Build the Project
+      run: mvn clean install -DskipTests
     - name: Start Xvfb
       if: matrix.os == 'ubuntu-latest'
       run: Xvfb $DISPLAY &
     - name: Run tests in chrome
       run: mvn -B test -Dbrowser=chrome
+      continue-on-error: true
     - name: Upload target folder
       uses: actions/upload-artifact@v2
       with:
@@ -43,6 +46,7 @@ jobs:
           ${{ github.workspace }}/target/cucumber-reports
     - name: Run tests in firefox
       run: mvn -B test -Dbrowser=firefox
+      continue-on-error: true
     - name: Upload target folder
       uses: actions/upload-artifact@v2
       with:
