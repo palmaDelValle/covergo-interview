@@ -1,5 +1,6 @@
 Feature: Asia insurance - Product distribution website - Form
 
+  # This scenario validates that the user can manage the selects field of the form
   @form
   Scenario Outline: Access to page
 
@@ -13,3 +14,5 @@ Feature: Asia insurance - Product distribution website - Form
       | age | gender   |
       | 0   | "female" |
       | 80  | "male"   |
+      | 0   | "male"   |
+      | 80  | "female" |

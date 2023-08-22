@@ -46,7 +46,8 @@ public class BrowserManager {
         browser.setupBrowser();
         browserType = browser.getBrowser();
         driver = browser.getDriver();
-        // Define the WebDriverWait with a timeout of the seconds informed in the Constants class.
+        // Define the WebDriverWait with a default timeout.
+        // The value of the timeout in seconds is informed in Constants class.
         wait = new WebDriverWait(this.driver, Duration.ofSeconds(Constants.TIMEOUT_IN_SECONDS));
         // Maximize the browser window.
         driver.manage().window().maximize();

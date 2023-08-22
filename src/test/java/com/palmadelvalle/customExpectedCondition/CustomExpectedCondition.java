@@ -3,26 +3,15 @@ package com.palmadelvalle.customExpectedCondition;
 import lombok.extern.slf4j.Slf4j;
 import org.openqa.selenium.*;
 import org.openqa.selenium.support.ui.ExpectedCondition;
-import org.openqa.selenium.support.ui.ExpectedConditions;
-
-import java.util.Objects;
 
 @Slf4j
 public class CustomExpectedCondition {
 
-    public static ExpectedCondition<Boolean> waitForPageReady() {
-        return new ExpectedCondition<Boolean>() {
-            @Override
-            public Boolean apply(WebDriver driver) {
-                String jsReturn = ((JavascriptExecutor) driver)
-                        .executeScript("return document.readyState")
-                        .toString();
-                log.info("JS return {}", jsReturn);
-                return jsReturn.equals("complete");
-            }
-        };
-    }
-
+    /**
+     * Custom Expected condition to return a boolean that identify if an element is displayed in the screen by his locator.
+     * @param locator Locator of the element that we want to know if it is displayed.
+     * @return Boolean indicating that the element is displayed in the screen (true) or not (false).
+     */
     public static ExpectedCondition<Boolean> isPresentElementLocated(final By locator) {
         return new ExpectedCondition<Boolean>() {
             public Boolean apply(WebDriver driver) {
@@ -32,7 +21,6 @@ public class CustomExpectedCondition {
                     return false;
                 }
             }
-
             public String toString() {
                 return "presence of element located by " + locator;
             }

@@ -1,11 +1,14 @@
 Feature: Asia insurance - Product distribution website - Card content
 
+  # This background is used to go to the main page of the application
+  # and selects the required values to go to the plan page, where are the cards.
   Background:
     Given user navigates to "https://imedical.asiainsurance.hk/" page
     And user selects age 34
     And user selects gender "male"
     And user clicks on "show_results" button
 
+  # This scenario validates that the sections that every card should contain are visible
   @card_details
   Scenario: Card content validation
     Given user is directed to the "plan" page
@@ -20,6 +23,7 @@ Feature: Asia insurance - Product distribution website - Card content
       | Benefits link  |
       | Documents link |
 
+    # This scenario validates that the important notes modal is shown.
   @important_notes
   Scenario: User can see important notes
     Given user is directed to the "plan" page
@@ -30,6 +34,7 @@ Feature: Asia insurance - Product distribution website - Card content
     And user clicks on "ok" button
     And the modal will be not present
 
+    # This scenario validates that the benefits modal is shown.
   @benefits_modal
   Scenario: User can see all benefits
     Given user is directed to the "plan" page
@@ -39,6 +44,7 @@ Feature: Asia insurance - Product distribution website - Card content
     And user clicks on "ok" button
     And the modal will be not present
 
+    # This scenario validates that the benefits modal is shown and the content can be hide.
   @benefits_modal @sub-benefit
   Scenario: User can see all benefits
     Given user is directed to the "plan" page

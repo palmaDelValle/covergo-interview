@@ -4,6 +4,7 @@ import com.palmadelvalle.pagesObject.*;
 import com.palmadelvalle.utils.Constants;
 import com.palmadelvalle.browserConfig.BrowserManager;
 import io.cucumber.datatable.DataTable;
+import io.cucumber.java.Scenario;
 import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
@@ -23,11 +24,11 @@ import java.util.Map;
 import static com.palmadelvalle.pagesObject.HeaderPO.BTN_EN_LOCATOR_XPATH;
 import static com.palmadelvalle.pagesObject.HeaderPO.BTN_HK_ZK_LOCATOR_XPATH;
 import static com.palmadelvalle.pagesObject.ModalPO.*;
+import static com.palmadelvalle.utils.ScreenshotUtil.attachScreenshotToScenario;
 
 @Slf4j
 public class Steps {
 
-    private BrowserManager browserManager;
     private final HomePO homePO;
     private final InfoPO infoPO;
     private final HeaderPO headerPO;
@@ -43,7 +44,7 @@ public class Steps {
         this.driver = browserManager.getDriver();
         this.wait = browserManager.getWait();
         this.homePO = new HomePO(driver);
-        this.infoPO = new InfoPO(driver);
+        this.infoPO = new InfoPO(driver, wait);
         this.cardPO = new CardPO(driver);
         this.headerPO = new HeaderPO(driver, wait);
         this.basePO = new BasePO(driver);
@@ -68,7 +69,10 @@ public class Steps {
 
     @And("user clicks on {string} button")
     public void userClicksOnButton(String buttonLabel) {
-        wait.until(ExpectedConditions.visibilityOfElementLocated(basePO.getElementXpathLocatorContainingTextByLocale(buttonLabel, locale))).click();
+        // Locator of the element
+        By locator = basePO.getElementXpathLocatorContainingTextByLocale(buttonLabel, locale);
+        // Wait until element is visible. Then click.
+        wait.until(ExpectedConditions.visibilityOfElementLocated(locator)).click();
     }
 
     @Then("user is directed to the {string} page")
@@ -80,28 +84,30 @@ public class Steps {
     @Then("user see cards element")
     public void userWillSeeCardsElement() {
         List<WebElement> cardsList = infoPO.getCardsList(locale);
-        wait.until(ExpectedConditions.visibilityOfAllElements(cardsList));
         Assertions.assertEquals(8, cardsList.size());
     }
     
 
     @And("the card will contain the product information")
     public void theCardWillContainTheProductInformation(DataTable fields) {
+        // We are using the first card shown in the plan page.
+        // This could be changed to inform the card to be used.
         WebElement firstCard = infoPO.getCardsList(locale).get(0);
+        // Wait for the card to be clickable. This behaviour is to about NoSuchElementException.
         wait.until(ExpectedConditions.elementToBeClickable(firstCard));
-
+        // Iterate for every row informed in the fields datatable.
+        // Then the test wait until element is in the present and perform the assertion.
         for (String field : fields.asList(String.class)) {
             log.info("Field to check: {}", field);
-            wait.until(ExpectedConditions.presenceOfElementLocated(cardPO.getCardFieldLocator(field, locale)));
-            //wait.until(ExpectedConditions.presenceOfElementLocated(cardPO.getLinkLocatorByLocale(field, locale)));
-
-            Assertions.assertTrue(firstCard.findElement(cardPO.getCardFieldLocator(field, locale)).isDisplayed());
-            //Assertions.assertTrue(firstCard.findElement(cardPO.getLinkLocatorByLocale(field, locale)).isDisplayed());
+            By locator = cardPO.getCardFieldLocator(field, locale);
+            Assertions.assertTrue(wait.until(ExpectedConditions.presenceOfElementLocated(locator)).isDisplayed());
         }
     }
     @And("user changes lang")
     public void userChangesLang() {
-        // Assume that when the url not contain lang, the page is in English.
+        // Note: locale variable indicates to the scenario the current language of the site.
+        // We assume that the default language of the site is English and when the user changes the language
+        // we change the variable assignment to the current language.
         if(driver.getCurrentUrl().contains(Constants.ZH_HK)) {
             wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath(BTN_EN_LOCATOR_XPATH)));
             headerPO.btnEnlang.click();
@@ -118,15 +124,13 @@ public class Steps {
 
     @When("user clicks on {string} link")
     public void userClicksOnLink(String link) {
+        // We are using the first card shown in the plan page.
+        // This could be changed to inform the card to be used.
         WebElement firstCard = infoPO.getCardsList(locale).get(0);
         wait.until(ExpectedConditions.elementToBeClickable(firstCard));
-        log.info("Field to check: {}", link);
-        //wait.until(ExpectedConditions.presenceOfElementLocated(cardPO.getCardFieldLocator(link, locale)));
-        //Assertions.assertTrue(firstCard.findElement(cardPO.getCardFieldLocator(link, locale)).isDisplayed());
-        //firstCard.findElement(cardPO.getCardFieldLocator(link, locale)).click();
-
-        wait.until(ExpectedConditions.presenceOfElementLocated(basePO.getLinkLocatorByLocale(link, locale)));
-        Assertions.assertTrue(firstCard.findElement(basePO.getLinkLocatorByLocale(link, locale)).isDisplayed());
+        log.info("Link to be clicked: {}", link);
+        By locator = basePO.getLinkLocatorByLocale(link, locale);
+        Assertions.assertTrue(wait.until(ExpectedConditions.presenceOfElementLocated(locator)).isDisplayed());
         firstCard.findElement(basePO.getLinkLocatorByLocale(link, locale)).click();
     }
 
@@ -139,6 +143,7 @@ public class Steps {
 
     @And("the modal will be not present")
     public void theModalWillBeNotPresent() {
+        // Evaluates that the modal is not present.
         ExpectedCondition<Boolean> result = ExpectedConditions.invisibilityOfElementLocated(By.xpath(modalLocatorXpath));
         Assertions.assertTrue(result.apply(driver));
     }
@@ -151,8 +156,7 @@ public class Steps {
     @Then("the page should be in {string} language")
     public void thePageShouldBeInLang(String lang) {
         log.info("Current url: {} -> Lang: {}", driver.getCurrentUrl(), lang);
-        wait.until(ExpectedConditions.urlContains(lang));
-        Assertions.assertTrue(driver.getCurrentUrl().contains(lang));
+        Assertions.assertTrue(wait.until(ExpectedConditions.urlContains(lang)));
     }
 
     @Then("the section {string} should {string}")
@@ -166,15 +170,15 @@ public class Steps {
 
     @Then("a form with title {string} should be visible")
     public void aFormWithTitleShouldBeVisible(String title) {
-        Assertions.assertTrue(
-                wait.until(ExpectedConditions.visibilityOfElementLocated(basePO.getElementXpathLocatorContainingTextByLocale(title, locale))).isDisplayed());
+        By locator = basePO.getElementXpathLocatorContainingTextByLocale(title, locale);
+        Assertions.assertTrue(wait.until(ExpectedConditions.visibilityOfElementLocated(locator)).isDisplayed());
     }
 
     @When("user fulfill mandatory fields")
     public void userFulfillMandatoryFields(DataTable dataTable) {
         for (Map<String, String> columns : dataTable.asMaps(String.class, String.class)) {
             log.info("Field: {}, Type: {}, Value: {}", columns.get("field"), columns.get("type"), columns.get("value"));
-            // I have to wait until the element is visible in the scree
+            // I have to wait until the element is visible in the screen
             // then I have to fulfill the field with the value
             paymentPO.fulfillField(columns.get("field"), columns.get("type"), columns.get("value"), locale);
         }

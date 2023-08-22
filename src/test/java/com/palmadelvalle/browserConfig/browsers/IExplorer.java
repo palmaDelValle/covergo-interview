@@ -7,8 +7,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
-import java.time.Duration;
-
 @Slf4j
 public class IExplorer implements Browser {
     private BrowserType browserType = BrowserType.IEXPLORER;
@@ -37,7 +35,7 @@ public class IExplorer implements Browser {
     public void setupBrowser() {
         if (System.getProperty("headless") != null) {
             log.warn("Headless mode not supported in Internet explorer");
-            log.warn("Ignoring headless property");
+            log.warn("Ignoring --headless property");
         }
         this.driver = WebDriverManager.iedriver().create();
     }

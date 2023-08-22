@@ -7,8 +7,6 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
-import java.time.Duration;
-
 public class Chromium implements Browser {
     private BrowserType browserType = BrowserType.CHROMIUM;
     private WebDriver driver;
@@ -41,5 +39,4 @@ public class Chromium implements Browser {
         }
         this.driver = WebDriverManager.chromiumdriver().capabilities(chromeOptions).create();
     }
-
 }

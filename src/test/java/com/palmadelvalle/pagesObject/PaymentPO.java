@@ -12,9 +12,7 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 @Slf4j
 public class PaymentPO extends BasePO {
 
-    private final WebDriver driver;
     private final WebDriverWait wait;
-    //private final String BASE_XPATH = "//*[contains(text(),'%s')]//parent::div";
     private final String BASE_XPATH_SELECT = "//*[contains(text(),'%s')]/ancestor::div[1]//select";
     private final String BASE_XPATH_INPUT = "//*[contains(text(),'%s')]//ancestor::div[1]//input";
     private final String BASE_XPATH_DIV = "//*[contains(text(),'%s')]";
@@ -24,10 +22,18 @@ public class PaymentPO extends BasePO {
 
     public PaymentPO(WebDriver driver, WebDriverWait wait) {
         super(driver);
-        this.driver = driver;
         this.wait = wait;
     }
 
+    /**
+     * This method builds a dynamic Xpath and then find the field on the screen.
+     * @param label Is the label of the WebElement in the screen, we use the key declare in the label_mappings.json file
+     *              to calculate the label value in the current application lang.
+     * @param type Is the type of the field which we are going to perform the action.
+     *             The value of type should be one of the following: div, switch, button, select, input.
+     * @param locale The current application lang.
+     * @return WebDriverElement found.
+     */
     private WebElement getFieldByLabelAndType(String label, String type, String locale) {
         String xpath = "";
         switch (type) {
@@ -51,13 +57,23 @@ public class PaymentPO extends BasePO {
                 break;
         }
         xpath = String.format(xpath, TranslationUtils.getLabelByLang(label, locale));
-        wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath(xpath)));
-        return driver.findElement(By.xpath(xpath));
+        return wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath(xpath)));
     }
 
+    /**
+     * This method perform an action to a WebElement. I have defined the action to the component by the page behaviour.
+     * Eg: The DIV element receive the action clicks because some "buttons" in the application are div.
+     * Eg: The switch component is also a DIV but without text content, so I decided to declare the type switch.
+     * @param label Is the label of the WebElement in the screen, we use the key declare in the label_mappings.json file
+     *              to calculate the label value in the current application lang.
+     * @param type Is the type of the field which we are going to perform the action.
+     *             The value of type should be one of the following: div, switch, button, select, input.
+     * @param value The value that we want to set on the field. This is only applicable to types: select and input.
+     * @param locale The current application lang.
+     */
     public void fulfillField(String label, String type, String value, String locale) {
         WebElement element = getFieldByLabelAndType(label, type, locale);
-        switch (type) {
+        switch (type.toLowerCase()) {
             case "div":
             case "switch":
             case "button":
@@ -74,23 +90,17 @@ public class PaymentPO extends BasePO {
         }
     }
 
+    /**
+     * This method get the error message related to the field informed.
+     * @param label Is the label of the WebElement in the screen, we use the key declare in the label_mappings.json file
+     *              to calculate the label value in the current application lang.
+     * @param type  Is the type of the field which we are going to perform the action.
+     *              The value of type should be one of the following: div, switch, button, select, input.
+     * @param locale The current application lang.
+     * @return The WebDriverElement of the message related to the field informed.
+     */
     public WebElement getErrorMessageForField(String label, String type, String locale) {
         WebElement element = getFieldByLabelAndType(label, type, locale);
         return element.findElement(By.xpath(BASE_XPATH_ERROR));
-        /*switch (type) {
-            case "div":
-            case "switch":
-            case "button":
-                return element.findElement(By.xpath(BASE_XPATH_ERROR));
-                break;
-            case "select":
-                return Select(element).selectByValue(value);
-                break;
-            case "input":
-                element.sendKeys(value);
-                break;
-            default:
-                log.warn("Element type {} not found", type);
-        }*/
     }
 }

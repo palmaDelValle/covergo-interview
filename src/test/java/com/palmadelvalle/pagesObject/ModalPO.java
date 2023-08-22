@@ -6,6 +6,7 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
+import org.openqa.selenium.support.ui.WebDriverWait;
 
 public class ModalPO extends BasePO {
 
@@ -22,12 +23,23 @@ public class ModalPO extends BasePO {
     @FindBy(xpath = modalLocatorXpath)
     public WebElement modal;
 
+    /**
+     * This method build a string with the Xpath to get the title of the modal.
+     * @param title Key of the title in label_mappings.json file.
+     * @param locale Current lang of the application.
+     * @return String with the dynamic Xpath to find the element.
+     */
     public static String getTitleXpathByLocale(String title, String locale) {
         return String.format(modalTitleLocatorXpath, TranslationUtils.getLabelByLang(title, locale));
     }
 
+    /**
+     * This method evaluates if the section sub-benefit is present in the screen.
+     * @return boolean indicating if the section is present in the screen (true) or not (false).
+     */
     public boolean isSubBenefitSectionVisible() {
-        return CustomExpectedCondition.isPresentElementLocated(By.xpath(subBenefitsSectionLocatorXpath)).apply(driver);
+        By locator = By.xpath(subBenefitsSectionLocatorXpath);
+        return CustomExpectedCondition.isPresentElementLocated(locator).apply(driver);
     }
 
 }

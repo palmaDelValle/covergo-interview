@@ -7,8 +7,6 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.firefox.FirefoxOptions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
-import java.time.Duration;
-
 public class Firefox implements Browser {
     private BrowserType browserType = BrowserType.FIREFOX;
     private WebDriver driver;
@@ -39,7 +37,7 @@ public class Firefox implements Browser {
         if (System.getProperty("headless") != null) {
             firefoxOptions.addArguments("--headless");
         }
-        this.driver = WebDriverManager.firefoxdriver().create();
+        this.driver = WebDriverManager.firefoxdriver().capabilities(firefoxOptions).create();
     }
 
 }
