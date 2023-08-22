@@ -144,8 +144,8 @@ public class Steps {
     @And("the modal will be not present")
     public void theModalWillBeNotPresent() {
         // Evaluates that the modal is not present.
-        ExpectedCondition<Boolean> result = ExpectedConditions.invisibilityOfElementLocated(By.xpath(modalLocatorXpath));
-        Assertions.assertTrue(result.apply(driver));
+        Boolean result = wait.until(ExpectedConditions.invisibilityOfElementLocated(By.xpath(modalLocatorXpath)));
+        Assertions.assertTrue(result);
     }
 
     @When("user changes to {string} lang")
