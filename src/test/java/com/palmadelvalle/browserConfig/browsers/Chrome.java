@@ -33,11 +33,17 @@ public class Chrome implements Browser {
 
     @Override
     public void setupBrowser() {
-        ChromeOptions chromeOptions = new ChromeOptions();
+        ChromeOptions options = new ChromeOptions();
         if (System.getProperty("headless") != null) {
-            chromeOptions.addArguments("--headless");
+            options.addArguments("--headless");
+            options.addArguments("--disable-gpu");
+            options.addArguments("--window-size=1920,1200");
+            options.addArguments("--ignore-certificate-errors");
+            options.addArguments("--disable-extensions");
+            options.addArguments("--no-sandbox");
+            options.addArguments("--disable-dev-shm-usage");
         }
-        this.driver = WebDriverManager.chromedriver().capabilities(chromeOptions).create();
+        this.driver = WebDriverManager.chromedriver().capabilities(options).create();
     }
 
 }

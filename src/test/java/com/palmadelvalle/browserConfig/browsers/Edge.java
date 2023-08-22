@@ -33,11 +33,11 @@ public class Edge implements Browser {
 
     @Override
     public void setupBrowser() {
-        EdgeOptions edgeOptions = new EdgeOptions();
+        EdgeOptions options = new EdgeOptions();
         if (System.getProperty("headless") != null) {
-            edgeOptions.addArguments("--headless");
+            options.addArguments("--headless");
         }
-        this.driver = WebDriverManager.edgedriver().capabilities(edgeOptions).create();
+        this.driver = WebDriverManager.edgedriver().capabilities(options).create();
     }
 
 }

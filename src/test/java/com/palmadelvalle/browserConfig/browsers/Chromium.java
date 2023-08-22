@@ -33,10 +33,10 @@ public class Chromium implements Browser {
 
     @Override
     public void setupBrowser() {
-        ChromeOptions chromeOptions = new ChromeOptions();
+        ChromeOptions options = new ChromeOptions();
         if (System.getProperty("headless") != null) {
-            chromeOptions.addArguments("--headless");
+            options.addArguments("--headless");
         }
-        this.driver = WebDriverManager.chromiumdriver().capabilities(chromeOptions).create();
+        this.driver = WebDriverManager.chromiumdriver().capabilities(options).create();
     }
 }

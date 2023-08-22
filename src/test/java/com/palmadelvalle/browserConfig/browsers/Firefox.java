@@ -33,11 +33,11 @@ public class Firefox implements Browser {
 
     @Override
     public void setupBrowser() {
-        FirefoxOptions firefoxOptions = new FirefoxOptions();
+        FirefoxOptions options = new FirefoxOptions();
         if (System.getProperty("headless") != null) {
-            firefoxOptions.addArguments("--headless");
+            options.addArguments("--headless");
         }
-        this.driver = WebDriverManager.firefoxdriver().capabilities(firefoxOptions).create();
+        this.driver = WebDriverManager.firefoxdriver().capabilities(options).create();
     }
 
 }
