@@ -30,10 +30,6 @@ jobs:
       with:
         distribution: 'temurin'
         java-version: ${{ matrix.java }}
-    - name: Install Chrome
-      uses: browser-actions/setup-chrome@latest
-    - name: Install Firefox
-      uses: browser-actions/setup-firefox@latest
     - name: Start Xvfb
       if: matrix.os == 'ubuntu-latest'
       run: Xvfb $DISPLAY &
