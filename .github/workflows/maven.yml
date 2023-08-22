@@ -36,7 +36,7 @@ jobs:
       if: matrix.os == 'ubuntu-latest'
       run: Xvfb $DISPLAY &
     - name: Run tests in chrome
-      run: mvn -B test -Dbrowser=chrome
+      run: mvn -B test -Dbrowser=chrome -Dcucumber.execution.parallel.enabled=false
       continue-on-error: true
     - name: Upload target folder
       uses: actions/upload-artifact@v2
@@ -45,7 +45,7 @@ jobs:
         path: |
           ${{ github.workspace }}/target/cucumber-reports
     - name: Run tests in firefox
-      run: mvn -B test -Dbrowser=firefox
+      run: mvn -B test -Dbrowser=firefox -Dcucumber.execution.parallel.enabled=false
       continue-on-error: true
     - name: Upload target folder
       uses: actions/upload-artifact@v2
