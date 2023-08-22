@@ -16,9 +16,13 @@ on:
 
 jobs:
   build:
-
-    runs-on: ubuntu-latest
-
+    strategy:
+      matrix:
+        os: [ ubuntu-latest, windows-latest, macos-latest ]
+        java: [ 11 ]
+    runs-on: ${{ matrix.os }}
+    env:
+      DISPLAY: :99
     steps:
     - uses: actions/checkout@v3
     - name: Set up JDK 11
