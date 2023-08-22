@@ -1,4 +1,4 @@
-# coverGo Interview
+# CoverGo Interview
 
 The purpose of this project is to show the coverGo interviewers some tests for a web application.
 
@@ -102,6 +102,23 @@ mvn clean test -Dbrowser=chrome -Dheadless
 mvnw.cmd clean test -Dbrowser=chrome -Dheadless
 ```
 
+### Parallel execution
+This projects is configured to execute the test in parallel. The parallel configuration is in file junit-platform.properties.
+The main properties defined in this file are:
+```text
+# Enables parallel execution for cucumber
+cucumber.execution.parallel.enabled=true
+
+# Define a custom strategy for parallelism
+cucumber.execution.parallel.config.strategy=custom
+
+# Set the custom parallel strategy class due fixed strategy not works in JAVA 9+.
+cucumber.execution.parallel.config.custom.class=com.palmadelvalle.cucumber.runner.CustomParallelStrategy
+```
+
+By default, the project the tests are executed in maximum 5 pool. This is controlled with the variable FIXED_PARALLELISM in the Constants class.
+
+
 ### Filtering by tags
 In this project, I have defined some tags in the scenarios to control the execution. With maven and this tags, we can define explicitly which test we want to be executed.
 
@@ -117,6 +134,15 @@ mvn clean test -Dbrowser=chrome -Dheadless -Dgroups="card_details"
 mvnw.cmd clean test -Dbrowser=chrome -Dheadless -Dgroups="card_details"
 ```
 
+
+## Reporting
+
+Once the tests have been executed, all the reports generated during the execution will be in the directory "target/cucumber-reports"
+Three differents reports will be generated:
+- Cucumber JSON report: Cucumber.html
+- Cucumber HTML report: Cucumber.json
+- JUnit XML report: Cucumber.xml
+
 ## Authors
 
-- [@palmadelvalle](https://github.com/palmaDelValle)
+- Francisco Javier Palma del Valle [@palmadelvalle](https://github.com/palmaDelValle)
