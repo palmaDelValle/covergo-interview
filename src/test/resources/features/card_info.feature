@@ -46,7 +46,7 @@ Feature: Asia insurance - Product distribution website - Card content
 
     # This scenario validates that the benefits modal is shown and the content can be hide.
   @benefits_modal @sub-benefit
-  Scenario: User can see all benefits
+  Scenario: User can see all benefits and sub-benefits
     Given user is directed to the "plan" page
     And user see cards element
     When user clicks on "see_all_benefits" link

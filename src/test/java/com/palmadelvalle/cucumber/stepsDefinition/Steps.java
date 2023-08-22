@@ -178,8 +178,6 @@ public class Steps {
     public void userFulfillMandatoryFields(DataTable dataTable) {
         for (Map<String, String> columns : dataTable.asMaps(String.class, String.class)) {
             log.info("Field: {}, Type: {}, Value: {}", columns.get("field"), columns.get("type"), columns.get("value"));
-            // I have to wait until the element is visible in the screen
-            // then I have to fulfill the field with the value
             paymentPO.fulfillField(columns.get("field"), columns.get("type"), columns.get("value"), locale);
         }
     }

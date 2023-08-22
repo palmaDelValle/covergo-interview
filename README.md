@@ -17,14 +17,23 @@ For this project, I have used the following tools:
 
 It´s important to keep in mind that the followings tools should be installed to execute the tests:
 - Java JDK
-- Maven at least 3.6.2 version [How to install Maven](https://maven.apache.org/install.html)
 - A browser (Chrome, Firefox, Edge, Chromium, Safari)
 
 ## Usage/Examples
 This project uses maven to execute the tests with the following command:
 
+If you have Maven locally installed:
 ```bash
 mvn clean test
+```
+If you don´t have Maven installed and you are on Linux, you can use:
+```bash
+./mvnw clean test
+```
+
+Or if you are on Windows:
+```bash
+mvnw.cmd clean test
 ```
 
 To control how the tests will be executed, I have some properties that we can use to modify the execution of the tests. The properties are:
@@ -47,14 +56,28 @@ Examples:
 
 ```bash
 mvn clean test -Dbrowser=chrome
+# or you can use
+# Linux:
+./mvnw clean test -Dbrowser=chrome
+# Windows
+mvnw.cmd clean test -Dbrowser=chrome
 ```
 
 ```bash
 mvn clean test -Dbrowser=safari
+# or you can use
+# Linux:
+./mvnw clean test -Dbrowser=safari
+
 ```
 
 ```bash
 mvn clean test -Dbrowser=firefox
+# or you can use
+# Linux:
+./mvnw clean test -Dbrowser=firefox
+# Windows
+mvnw.cmd clean test -Dbrowser=firefox
 ```
 
 ### Property headless
@@ -72,6 +95,11 @@ Examples:
 
 ```bash
 mvn clean test -Dbrowser=chrome -Dheadless
+# or you can use
+# Linux:
+./mvnw clean test -Dbrowser=chrome -Dheadless
+# Windows
+mvnw.cmd clean test -Dbrowser=chrome -Dheadless
 ```
 
 ### Filtering by tags
@@ -82,6 +110,11 @@ Having a feature or scenario with tag @card_details, we can control the executio
 
 ```bash
 mvn clean test -Dbrowser=chrome -Dheadless -Dgroups="card_details"
+# or you can use
+# Linux:
+./mvnw clean test -Dbrowser=chrome -Dheadless -Dgroups="card_details"
+# Windows
+mvnw.cmd clean test -Dbrowser=chrome -Dheadless -Dgroups="card_details"
 ```
 
 ## Authors
