@@ -143,6 +143,8 @@ Three differents reports will be generated:
 - Cucumber HTML report: Cucumber.json
 - JUnit XML report: Cucumber.xml
 
+You can find examples of this files in the following link [CoverGo tests execution](https://github.com/palmaDelValle/covergo-interview/actions/runs/5940663212)
+
 ## Authors
 
 - Francisco Javier Palma del Valle [@palmadelvalle](https://github.com/palmaDelValle)
