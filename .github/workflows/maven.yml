@@ -32,7 +32,7 @@ jobs:
     - name: Install Firefox
       uses: browser-actions/setup-firefox@latest
     - name: Execute tests in Chrome
-      run: mvn clean tests -Dbrowser=chrome
+      run: mvn clean test -Dbrowser=chrome
     - name: Upload target folder
       uses: actions/upload-artifact@v2
       with:
@@ -40,7 +40,7 @@ jobs:
         path: |
           ${{ github.workspace }}/target/cucumber-reports
     - name: Execute tests in Firefox
-      run: mvn clean tests -Dbrowser=firefox
+      run: mvn clean test -Dbrowser=firefox
     - name: Upload target folder
       uses: actions/upload-artifact@v2
       with:
